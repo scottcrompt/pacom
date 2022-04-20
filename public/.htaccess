@@ -1,0 +1,10 @@
+#Config
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Envoie requête à Index.php quand /
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
