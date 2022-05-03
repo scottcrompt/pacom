@@ -11,10 +11,10 @@
       <input type="password" id="inputPassword" class="form-control" placeholder="Password" >
       <div class="checkbox mb-3">
         <label>
-          <input type="checkbox" value="remember-me"> Remember me
+          <input type="checkbox" value="remember-me"> Se souvenir de moi
         </label>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" class="btn-login" type="submit">Sign in</button>
+      <button class="btn btn-lg btn-primary btn-block" class="btn-login" type="submit">Se connecter</button>
      
     </form>
 </div>
