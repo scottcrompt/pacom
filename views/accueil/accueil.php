@@ -1,5 +1,23 @@
 
+<?php  if(isset($messageErreur)){?>
+  <div class="container-fluid">
+    <div class="row">
+            <div class="alert alert-danger alert-dismissible text-center" role="alert">
+            <?php echo ($messageErreur);?>
+            </div>
+  </div>
+</div>
+<?php } ?>
+<?php if(isset($_GET['message'])){?>
+  <div>
+    <div>
+            <div class="alert alert-success alert-dismissible text-center" role="alert">
+            <?php echo ($_GET['message']);?>
+          </div>
+            
+  </div>
 
+<?php } ?>
     <main role="main">
 
       <section class="jumbotron text-center">
@@ -8,7 +26,7 @@
           <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don't simply skip over it entirely.</p>
           <p>
             <a href="/user/login" class="btn btn-primary my-2">Se connecter</a>
-            <a href="/user/index" class="btn btn-secondary my-2">S'inscrire</a>
+            <a href="/user/register" class="btn btn-secondary my-2">S'inscrire</a>
           </p>
         </div>
       </section>

@@ -117,8 +117,8 @@ abstract class AbstractDAO {
 
 
     //Many to One
-    public function belongsTo ($dao, $id) {
-        return $dao->fetch($id, false);
+    public function belongsTo ($dao,$ref, $id) {
+        return $dao->fetch($id,$ref, false);
     }
     
     //One to Many

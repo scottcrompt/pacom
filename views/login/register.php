@@ -1,3 +1,12 @@
+<?php  if(isset($messageErreur)){?>
+  <div class="container-fluid">
+    <div class="row">
+            <div class="alert alert-danger alert-dismissible text-center" role="alert">
+            <?php echo ($messageErreur);?>
+            </div>
+  </div>
+</div>
+<?php } ?>
 <div class="bg-light">
   <div class="container">
     <div class="py-5 text-center">
@@ -32,10 +41,24 @@
               </div>
             </div>
             <div class="mb-3">
+              <label for="email2">Confirmer email</label>
+              <input type="email2" class="form-control" name="email2" id="email2" placeholder="exemple@exemple.com" required>
+              <div class="invalid-feedback">
+                Veuillez confirmer l'email.
+              </div>
+            </div>
+            <div class="mb-3">
               <label for="mdp">Mot de passe</label>
               <input type="password" class="form-control" name="mdp" id="mdp" placeholder="" required>
               <div class="invalid-feedback">
                 Un mot de passe valide est requis.
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="mdp2">Confirmer mot de passe</label>
+              <input type="password" class="form-control" name="mdp2" id="mdp2" placeholder="" required>
+              <div class="invalid-feedback">
+              Veuillez confirmer le mot de passe.
               </div>
             </div>
 

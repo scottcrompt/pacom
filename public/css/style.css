@@ -1,4 +1,15 @@
+/* General */
+
+.alert{
+  text-align: center;
+}
+
+/* Navbar*/
+
+
+
 /* Acceuil */
+
 
 :root {
     --jumbotron-padding-y: 3rem;
