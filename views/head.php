@@ -18,17 +18,34 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample06" aria-controls="navbarsExample06" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarsExample06">
       <ul class="navbar-nav mr-auto">
+      <?php if (isset($roleLoggedUser)&&$roleLoggedUser=='user') :  
+        // Navbar USER ?> 
         <li class="nav-item active">
           <a class="nav-link" href="#">Mes cours</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Mes chevaux</a>
         </li>
-
-        <?php if (isset($_COOKIE['sessionToken'])) : ?>
+        <?php endif ?>
+        <?php if (isset($roleLoggedUser)&&$roleLoggedUser=='admin') :  
+          // Navbar ADMIN?> 
+        <li class="nav-item active">
+          <a class="nav-link" href="/cours">Cours</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/cheval">Chevaux</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user">Utilisateurs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Admin</a>
+        </li>
+        <?php endif ?>
+        <?php if (isset($_COOKIE['sessionToken'])) : 
+          //Afficher seulement si connecté?>
           <li class="nav-item"><a href="/user/deleteToken" class="nav-link">Se déconnecter</a></li>
         <?php endif ?>
       </ul>

@@ -9,6 +9,19 @@ class UserDAO extends AbstractDAO
     public function role($roleID){
         return $this->belongsTo(new RoleDAO,"RoleID", $roleID);
     }
+    public function ecurie($ecurieID){
+        return $this->belongsTo(new EcurieDAO,"EcurieID", $ecurieID);
+    }
+
+    public function cheval($userID){
+        return $this->hasMany(new ChevalDAO(),'ChevalUserXID',$userID);
+    }
+
+    public function cours($UserID){
+        return $this->belongsToMany(new CoursDAO, "usercours", $UserID, "UserCoursUserXID","UserCoursCoursXID","CoursID");
+    }
+
+
     public function create ($result) {
         return new User(
             !empty($result['UserID']) ? $result['UserID'] : 0,
@@ -16,6 +29,7 @@ class UserDAO extends AbstractDAO
             $result['UserNom'],
             $result['UserEmail'],
             $result['UserMdp'],
+            $result['sessionToken']
         );
     }   
     public function deepcreate ($result) {
@@ -25,8 +39,11 @@ class UserDAO extends AbstractDAO
             $result['UserNom'],
             $result['UserEmail'],
             $result['UserMdp'],
+            $result['sessionToken'],
             $this->role($result['UserRoleXID']),
-            //$this->matchs($result['id'])   ------------------------------
+            $this->ecurie($result['UserEcurieXID']),
+            $this->cours($result['UserID']),
+            $this->cheval($result['UserID'])
         );
     }
 

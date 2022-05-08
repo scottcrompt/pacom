@@ -6,21 +6,24 @@ class User
     private $nom;
     private $email;
     private $mdp;
+    private $sessionToken = false;
     private $role = false;
     private $ecurie = false;
-    private $sessionToken = false;
+    private $cours = false;
+    private $cheval = false;
 
-    public function __construct($id, $prenom, $nom, $email,$mdp, $role = false,$ecurie =false, $sessionToken = false)
+    public function __construct($id, $prenom, $nom, $email,$mdp,$sessionToken = false, $role = false,$ecurie =false, $cours = false, $cheval = false)
     {
         $this->id = $id;
         $this->prenom = $prenom;
         $this->nom = $nom;
         $this->email = $email;
         $this->mdp = $mdp;
+        $this->sessionToken = $sessionToken;
         $this->role = $role;
         $this->ecurie = $ecurie;
-        $this->sessionToken = $sessionToken;
-
+        $this->cours = $cours;
+        $this->cheval = $cheval;
     }
 
 

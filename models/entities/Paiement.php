@@ -2,11 +2,13 @@
 {
     private $id;
     private $statut;
+    private $cours = false;
 
-    public function __construct($id, $statut)
+    public function __construct($id, $statut,$cours = false)
     {
         $this->id = $id;
         $this->statut = $statut;
+        $this->cours = $cours;
     }
 
     public function __get($prop)

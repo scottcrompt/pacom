@@ -13,15 +13,32 @@ class UserController extends AbstractController
         $user = $userDAO->fetchall();
 
         if (isset($_COOKIE['sessionToken'])) {
+            // Trouver ID du user connecté
             $IDloggedUser = $userDAO->fetchIdWhere('UserID', 'user', 'sessionToken', $_COOKIE['sessionToken']);
-
-            if ($IDloggedUser) {
-                var_dump($IDloggedUser);
-                var_dump($user);
+            // Récupérer toutes les infos du user connecté
+            $loggedUser = $userDAO->fetch($IDloggedUser['UserID'], "UserID");
+            var_dump($loggedUser);
+            // Trouver son role
+            $roleLoggedUser = $loggedUser->role->nom;
+            // Si role = useer on renvoie sur la page user
+            if ($IDloggedUser && $roleLoggedUser == 'user') {
+                //On renvoie le role à la vue pour afficher le header correcte
+                $roleLoggedUser = $loggedUser->role->nom;
                 include_once('../views/head.php');
                 include_once('../views/accueil/accueilLogged.php');
                 include_once('../views/foot.php');
-            } else {
+            }
+            // Si role = admin on renvoie sur la page admin
+            elseif ($IDloggedUser && $roleLoggedUser == 'admin') {
+                //On renvoie le role à la vue pour afficher le header correcte
+                $roleLoggedUser = $loggedUser->role->nom;
+                include_once('../views/head.php');
+                include_once('../views/accueil/accueilLoggedAdmin.php');
+                include_once('../views/foot.php');
+            }
+            // Si pas connecté on renvoie sur la page d'accueil
+            else {
+
                 //Si pour une raison le cookie est toujours dans le browser mais plus dans la BD
 
                 unset($_COOKIE['sessionToken']);

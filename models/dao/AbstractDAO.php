@@ -23,19 +23,22 @@ abstract class AbstractDAO {
         }
     }
     
-    public function fetchWhere ($ref, $value) {
+    public function fetchWhere ($ref, $value,$deep=true) {
         try {
             $statement = $this->connection->prepare("SELECT * FROM {$this->table} WHERE {$ref} = ?");
             $statement->execute([$value]);
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            if($deep) {
             return $this->createAllDeep($result);
+            }
+            return $this->createAll($result);
             
         } catch (PDOException $e) {
             print $e->getMessage();
         }
     }
 
-    //chercher 1
+    
     public function fetch ($id, $ref, $deep = true) {
         try {
             $statement = $this->connection->prepare("SELECT * FROM {$this->table} WHERE {$ref} = ?");
@@ -53,7 +56,7 @@ abstract class AbstractDAO {
     
 
 
-    public function fetchIntermediate ($table, $id, $key, $foreign) {
+    public function fetchIntermediate ($table, $id, $key, $foreign, $fetchIDRef) {
         try {
             $statement = $this->connection->prepare("SELECT * FROM {$table} WHERE {$key} = ?");
             $statement->execute([$id]);
@@ -62,7 +65,7 @@ abstract class AbstractDAO {
            
             foreach($result as $item) {
               
-                array_push($list, $this->fetch($item[$foreign], false));
+                array_push($list, $this->fetch($item[$foreign],$fetchIDRef, false));
             
             }
           
@@ -115,6 +118,14 @@ abstract class AbstractDAO {
         return $list;
     }
 
+    public function createAll ($results) {
+        $list = array();
+        foreach ($results as $result) {
+            array_push($list, $this->Create($result));
+        }
+        return $list;
+    }
+
 
     //Many to One
     public function belongsTo ($dao,$ref, $id) {
@@ -123,15 +134,17 @@ abstract class AbstractDAO {
     
     //One to Many
     public function hasMany ($dao, $col, $key) {
-        return $dao->fetchWhere($col, $key);
+        return $dao->fetchWhere($col, $key,false);
     }
     
     //Many to Many
-    public function belongsToMany ($dao, $table, $id, $key, $foreign) {
-        return $dao->fetchIntermediate($table, $id, $key, $foreign);
+    public function belongsToMany ($dao, $table, $id, $key, $foreign, $fetchIDRef) {
+        return $dao->fetchIntermediate($table, $id, $key, $foreign,$fetchIDRef);
     }
 
 
+
+    // Pour dropdown list
     public function associate ($table, $id, $key, $ref, $value) {
         try {
             $statement = $this->connection->prepare(
@@ -149,6 +162,7 @@ abstract class AbstractDAO {
  
     }
     
+    // Pour dropdown list
     public function dissociate ($table, $id, $key, $ref, $value) {
         try {
             $statement = $this->connection->prepare(

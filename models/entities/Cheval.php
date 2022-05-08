@@ -3,12 +3,14 @@
     private $id;
     private $nom;
     private $user = false;
+    private $cours = false;
 
-    public function __construct($id, $nom, $user = false)
+    public function __construct($id, $nom, $user = false, $cours = false)
     {
         $this->id = $id;
         $this->nom = $nom;
         $this->user = $user;
+        $this->cours = $cours;
     }
 
     public function __get($prop)

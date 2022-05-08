@@ -13,7 +13,7 @@ class Router {
         $this->get = $_GET;
         $this->post = $_POST;
         $this->actions = ['create', 'edit', 'delete', 'show', 'update', 'store', 'index', 'login', 'register', 'deleteToken'];
-        $this->controllers = ['index' => 'IndexController', 'user' => 'UserController','cheval' => 'chevalController', 'cours' => 'coursController'];
+        $this->controllers = ['index' => 'IndexController', 'user' => 'UserController','cheval' => 'ChevalController', 'cours' => 'CoursController'];
         $this->request = array();
         $this->data = $this->parseURI($_SERVER['REQUEST_URI']);
         $this->dispatch();
