@@ -39,13 +39,14 @@ class ChevalDAO extends AbstractDAO
     public function store($data)
     {
         if (empty($data['nom']) || empty($data['user'])) {
+            throw new Exception();
             return false;
         }
-        $cheval = $this->create(
+        $cheval = $this->deepcreate(
             [
                 'ChevalID' => 0,
                 'ChevalNom' => $data['nom'],
-                'ChevalUserXID' => $data['user'],
+                'ChevalUserXID' => $data['user']
             ]
         );
         if ($cheval) {
@@ -53,7 +54,7 @@ class ChevalDAO extends AbstractDAO
                 $statement = $this->connection->prepare("INSERT INTO {$this->table} (ChevalNom, ChevalUserXID) VALUES (?, ?)");
                 $statement->execute([
                     htmlspecialchars($cheval->nom),
-                    htmlspecialchars($cheval->user),
+                    htmlspecialchars($cheval->user->id)
                 ]);
                 return true;
             } catch (PDOException $e) {
@@ -61,6 +62,7 @@ class ChevalDAO extends AbstractDAO
                 return false;
             }
         }
+        return false;
     }
 
 
@@ -68,6 +70,7 @@ class ChevalDAO extends AbstractDAO
     public function delete($data)
     {
         if (empty($data['id'])) {
+            throw new Exception();
             return false;
         }
         // cherche s'il y a des matchs associés à l'équipe pour les supprimer également
@@ -101,19 +104,21 @@ class ChevalDAO extends AbstractDAO
 
     public function update($id, $data)
     {
-        if (empty($data['nom']) || empty($data['tag'])) {
-            var_dump('Veuillez remplir tous les champs');
+        if (empty($data['nom']) || empty($data['user']) || empty($id)) {
+            throw new Exception("Veuillez remplir tous les champs");
             return false;
         }
         try {
-            $statement = $this->connection->prepare("UPDATE {$this->table} SET nomEquipe = ?, tagEquipe = ? WHERE id = ?");
+            var_dump($data);
+            $statement = $this->connection->prepare("UPDATE {$this->table} SET ChevalNom = ?, ChevalUserXID = ? WHERE ChevalID = ?");
             $statement->execute([
                 htmlspecialchars($data['nom']),
-                htmlspecialchars($data['tag']),
+                htmlspecialchars($data['user']),
                 htmlspecialchars($id)
             ]);
             return true;
         } catch (PDOException $e) {
+            throw new Exception("Problème de BD - Appelez le support");
             print $e->getMessage();
             return false;
         }

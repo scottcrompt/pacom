@@ -1,5 +1,7 @@
 
-<?php  if(isset($messageErreur)){?>
+<!-- Diplay message d'erreur-->
+
+<?php  if(isset($messageErreur)):?>
   <div class="container-fluid">
     <div class="row">
             <div class="alert alert-danger alert-dismissible text-center" role="alert">
@@ -7,8 +9,11 @@
             </div>
   </div>
 </div>
-<?php } ?>
-<?php if(isset($_GET['message'])){?>
+<?php endif ?>
+
+<!-- Diplay message confirmation-->
+
+<?php if(isset($_GET['message'])):?>
   <div>
     <div>
             <div class="alert alert-success alert-dismissible text-center" role="alert">
@@ -17,7 +22,9 @@
             
   </div>
 
-<?php } ?>
+<?php endif ?>
+
+
     <main role="main">
 
       <section class="jumbotron text-center">

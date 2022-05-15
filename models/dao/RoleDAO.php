@@ -13,8 +13,7 @@ class RoleDAO extends AbstractDAO
     public function deepcreate ($result) {
         return new Role(
             $result['RoleID'],
-            $result['RoleNom'],
-            $this->user($result['UserID'])
+            $result['RoleNom']
         );
         
     }

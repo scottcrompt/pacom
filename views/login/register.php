@@ -34,6 +34,13 @@
               </div>
             </div>
             <div class="mb-3">
+              <label for="telephone">Numéro de téléphone</label>
+              <input type="text" class="form-control" name="telephone" id="telephone" placeholder="" required>
+              <div class="invalid-feedback">
+                Un numéro de téléphone valide est requis.
+              </div>
+            </div>
+            <div class="mb-3">
               <label for="email">Email</label>
               <input type="email" class="form-control" name="email" id="email" placeholder="exemple@exemple.com" required>
               <div class="invalid-feedback">
@@ -61,7 +68,7 @@
               Veuillez confirmer le mot de passe.
               </div>
             </div>
-
+            <input type="hidden" name="route" value="/">
             <hr class="mb-4">
             <button class="btn btn-primary btn-lg btn-block" type="submit">S'inscrire</button>
           </form>

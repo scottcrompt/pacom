@@ -3,6 +3,29 @@
 abstract class AbstractController
 {
 
+
+    public function getUser() {
+        if (!isset($_COOKIE['sessionToken'])) {
+            var_dump('no cookie!');
+            return false;
+        }
+
+        $userDAO = new UserDAO();
+        return $userDAO->fetch($_COOKIE['sessionToken'],'sessionToken');
+    }
+
+
+    public function LoggedUserRole() {
+        $user = $this->getUser();
+        if(!$user) {
+            include_once ('../views/head.php');
+            include_once('../views/accueil/accueil.php');
+            include_once ('../views/foot.php');
+            return false;
+        }
+        return $user->role->nom;
+    }
+
     public function create()
     {
         var_dump('no create');

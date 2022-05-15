@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,8 +21,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarsExample06">
       <ul class="navbar-nav mr-auto">
-      <?php if (isset($roleLoggedUser)&&$roleLoggedUser=='user') :  
-        // Navbar USER ?> 
+      <?php if (isset($_SESSION['roleLoggedUser']) && $_SESSION['roleLoggedUser']=='user' && isset($_COOKIE['sessionToken'])) :  
+        // Navbar USER ?>
         <li class="nav-item active">
           <a class="nav-link" href="#">Mes cours</a>
         </li>
@@ -29,8 +30,9 @@
           <a class="nav-link" href="#">Mes chevaux</a>
         </li>
         <?php endif ?>
-        <?php if (isset($roleLoggedUser)&&$roleLoggedUser=='admin') :  
+        <?php if (isset($_SESSION['roleLoggedUser']) && $_SESSION['roleLoggedUser']=='admin' && isset($_COOKIE['sessionToken'])) :  
           // Navbar ADMIN?> 
+
         <li class="nav-item active">
           <a class="nav-link" href="/cours">Cours</a>
         </li>
@@ -39,6 +41,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/user">Utilisateurs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user">Propriétaires</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Admin</a>
