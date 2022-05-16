@@ -12,6 +12,9 @@ class CoursController extends AbstractController
         $userDAO = new UserDAO();
         $user = $userDAO->fetchall();
 
+        $coursDAO = new CoursDAO();
+        $cours = $coursDAO->fetchall();
+
         if (isset($_COOKIE['sessionToken'])) {
             // Trouver ID du user connecté
             $IDloggedUser = $userDAO->fetchIdWhere('UserID', 'user', 'sessionToken', $_COOKIE['sessionToken']);
@@ -46,5 +49,50 @@ class CoursController extends AbstractController
             include_once('../views/foot.php');
         }
     }
+
+    public function create()
+    {
+
+        if (isset($_SESSION['roleLoggedUser']) && $_SESSION['roleLoggedUser'] == "admin") {
+            $roleDAO = new RoleDAO();
+            $role = $roleDAO->fetchall();
+            include_once('../views/head.php');
+            include_once('../views/cours/CRUD/coursCreate.php');
+            include_once('../views/foot.php');
+        } else {
+            $this->index();
+        }
+    }
+
+    public function register($id, $data)
+    {
+        if (!empty($data)) {
+            //inserer en db le nouveau cours
+            if (!empty($data['nom']) && !empty($data['user'])) {
+                $store = $this->store(false, $data);
+                var_dump($store);
+                if ($store === true) {
+                    echo"YO";
+                    $messageConfirmation = "Cours ajouté"; // Message confirmation
+                    $url = $data['route'] ? $data['route'] : '/';
+                    header("Location:{$url}?message=" .$messageConfirmation);
+                }
+            } else {
+                $messageErreur = "Oups, quelque chose s'est mal passé."; // Message d'erreur
+                include_once('../views/head.php');
+                include_once('../views/cheval/chevalIndex.php');
+                include_once('../views/foot.php');
+            }
+        } else {
+            $messageErreur = "Oups, quelque chose s'est mal passé."; // Message d'erreur
+            include_once('../views/head.php');
+            include_once('../views/cheval/chevalIndex.php');
+            include_once('../views/foot.php');
+        }
+    }
+
+
+
+
 }
 ?>

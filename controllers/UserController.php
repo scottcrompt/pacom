@@ -14,6 +14,7 @@ class UserController extends AbstractController
         $user = $userDAO->fetchall();
 
         if (isset($_COOKIE['sessionToken'])) {
+
             // Trouver ID du user connecté
             $IDloggedUser = $userDAO->fetchIdWhere('UserID', 'user', 'sessionToken', $_COOKIE['sessionToken']);
             // Récupérer toutes les infos du user connecté
@@ -23,10 +24,24 @@ class UserController extends AbstractController
 
             // Si role = admin on renvoie sur la page admin
             if ($IDloggedUser && $_SESSION['roleLoggedUser'] == 'admin') {
-                //On renvoie le role à la vue pour afficher le header correcte
-                include_once('../views/head.php');
-                include_once('../views/user/userIndex.php');
-                include_once('../views/foot.php');
+                if (isset($_GET['redirect'])) {
+                    if ($_GET['redirect'] == "prop") {
+                        $proprietaire = array();
+                        foreach ($user as $users) {
+                            if (sizeof($users->cheval) >= 1) {
+                                array_push($proprietaire, $users);  // Propriétaires = utilisteurs qui ont des chevaux 
+                            }
+                        }
+
+                        include_once('../views/head.php');
+                        include_once('../views/proprietaire/proprietaireIndex.php');
+                        include_once('../views/foot.php');
+                    }
+                } else {
+                    include_once('../views/head.php');
+                    include_once('../views/user/userIndex.php');
+                    include_once('../views/foot.php');
+                }
             }
             // Si pas connecté on renvoie sur la page d'accueil
             else {
@@ -56,22 +71,25 @@ class UserController extends AbstractController
 
     public function login($id, $data)
     {
-
-        if (!empty($_POST)) {
-            $user = $this->dao->verify($data);
-            if ($user) {
-                $url = $data['route'] ? $data['route'] : '/';
-                header("Location:{$url}");
+        if (isset($_SESSION['roleLoggedUser']) || isset($_COOKIE['sessionToken'])) {
+            $this->index();
+        } else {
+            if (!empty($_POST)) {
+                $user = $this->dao->verify($data);
+                if ($user) {
+                    $url = $data['route'] ? $data['route'] : '/';
+                    header("Location:{$url}");
+                } else {
+                    $messageErreur = "Nom d'utilisateur ou mot de passe incorrect";
+                    include_once('../views/head.php');
+                    include_once('../views/login/login.php');
+                    include_once('../views/foot.php');
+                }
             } else {
-                $messageErreur = "Nom d'utilisateur ou mot de passe incorrect";
                 include_once('../views/head.php');
                 include_once('../views/login/login.php');
                 include_once('../views/foot.php');
             }
-        } else {
-            include_once('../views/head.php');
-            include_once('../views/login/login.php');
-            include_once('../views/foot.php');
         }
     }
 
@@ -79,6 +97,7 @@ class UserController extends AbstractController
 
     public function register($id, $data)
     {
+
         if (!empty($data)) {
             //inserer en db le nouvel utilisateur
             if (
@@ -99,45 +118,59 @@ class UserController extends AbstractController
                         } elseif (isset($_SESSION['roleLoggedUser']) && $_SESSION['roleLoggedUser'] == 'admin') {  //Pour création d'utilisateur admin
                             $messageConfirmation = "L'utilisateur a bien été crée et un mail lui a été envoyé avec son mot de passe temporaire.";
                         }
+
                         $url = $data['route'] ? $data['route'] : '/';
                         header("Location:{$url}?message=" . $messageConfirmation);
                     }
                 }
             } else {
                 if (!isset($_SESSION['roleLoggedUser'])) {    //Quelque chose se passe mal register
-                $messageErreur = "Oups, quelque chose s'est mal passé."; // Message d'erreur
-                include_once('../views/head.php');
-                include_once('../views/login/register.php');
-                include_once('../views/foot.php');
-                }
-                elseif (isset($_SESSION['roleLoggedUser']) && $_SESSION['roleLoggedUser'] == 'admin') {   // Quelque chose se passe mal ajout de user admin
-                    $this->create();  
+                    $messageErreur = "Oups, quelque chose s'est mal passé."; // Message d'erreur
+                    include_once('../views/head.php');
+                    include_once('../views/login/register.php');
+                    include_once('../views/foot.php');
+                } elseif (isset($_SESSION['roleLoggedUser']) && $_SESSION['roleLoggedUser'] == 'admin') {   // Quelque chose se passe mal ajout de user admin
+                    $this->create();
                 }
             }
         } else {
-            // Redirect si on veut simplement le formulaire
-            include_once('../views/head.php');
-            include_once('../views/login/register.php');
-            include_once('../views/foot.php');
+            // Redirect si on veut simplement le formulaire (Register not logged)
+            if (!isset($_SESSION['roleLoggedUser']) || !isset($_COOKIE['sessionToken'])) {  //Pour ne pas qu'un utilisateur loggé ai accès au formulaire register
+                include_once('../views/head.php');
+                include_once('../views/login/register.php');
+                include_once('../views/foot.php');
+            } else {
+                $this->index();   //Redirection au cas où un utilisateur loggé essaye d'avoir accès au formulaire register
+            }
         }
     }
 
     public function delete($data)
     {
-        if ($_SESSION['roleLoggedUser'] == 'admin') {
-            try {
-                $this->dao->delete($_POST);
-            } catch (Exception $e) {
-                include_once('../views/head.php');
-                include_once('../views/error.php');
-                include_once('../views/foot.php');
+
+        //Variable pour check si l'utilisateur connecté ne se supprime pas lui-même
+        $userDAO = new UserDAO();
+        $user = $userDAO->fetchall();
+        $IDloggedUser = $userDAO->fetchIdWhere('UserID', 'user', 'sessionToken', $_COOKIE['sessionToken']);
+        if ($data!= $IDloggedUser['UserID']) {   // Check si l'utilisateur connecté ne se supprime pas lui-même
+            if ($_SESSION['roleLoggedUser'] == 'admin') {
+                try {
+                    $this->dao->delete($_POST);
+                } catch (Exception $e) {
+                    include_once('../views/head.php');
+                    include_once('../views/error.php');
+                    include_once('../views/foot.php');
+                }
+            } else {
+                $this->index();
             }
-        } else {
+            $messageConfirmation = 'Utilisateur supprimé';
+            $url = $_POST['route'] ? $_POST['route'] : '/';
+            header("Location:{$url}?message=" . $messageConfirmation);
+        }
+        else{
             $this->index();
         }
-        $messageConfirmation = 'Utilisateur supprimé';
-        $url = $_POST['route'] ? $_POST['route'] : '/';
-        header("Location:{$url}?message=" . $messageConfirmation);
     }
 
 

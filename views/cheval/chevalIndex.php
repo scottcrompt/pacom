@@ -41,13 +41,13 @@
             </div>
             <?php if (isset($user)) : ?>
                 <select class="form-control" name="user" id="user" required>
-                    <option value="">Sélectionnez un utilisateur</option>
+                    <option value="">Sélectionnez un propriétaire</option>
                     <?php foreach ($user as $users) : ?>
                         <option value="<?= $users->id ?>"> <?= $users->prenom." ".$users->nom; ?></option>
                     <?php endforeach; ?>
                 </select>
                 <div class="invalid-feedback">
-                     Veuillez choisir un utilisateur
+                     Veuillez choisir un propriétaire
                 </div>
             <?php else : $messageErreur = "Pas d'utilisateurs disponibles";?>
             <?php endif ?>

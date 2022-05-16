@@ -6,11 +6,22 @@
   <meta charset="UTF-8">
   <title>Pacom (Titre dynamique)</title>
 
+  <!-- Date and timePicker -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+  <!--DatePicker-->
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
 
 
   <link href="/css/style.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
 
 </head>
 <header>
@@ -43,7 +54,7 @@
           <a class="nav-link" href="/user">Utilisateurs</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/user">Propriétaires</a>
+        <a class="nav-link" href="/user?redirect=prop">Propriétaire</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Admin</a>

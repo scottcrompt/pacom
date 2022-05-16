@@ -52,6 +52,7 @@
                             <td><?= $users->__get('email'); ?></td>
                             <td><?= $users->__get('telephone'); ?></td>
                             <td><?= $users->role->nom; ?></td>
+                            <?php if ($users->id != $IDloggedUser['UserID']):  //Supprime le bouton pour supprimer le joueur connecté pour ne pas qu'il puisse se supprimer lui-même -> 2ème vérification en back  ?>
                             <td>
                                 <form action="/user/delete" method="post">
                                     <input type="hidden" name="id" value="<?= $users->id; ?>">
@@ -59,11 +60,15 @@
                                     <input type="submit" class="btn btn-secondary" value="Supprimer" name="deleteUser" onclick="//return confirm('Êtes-vous sûr de vouloir supprimer ?');">
                                 </form>
                             </td>
+                            
                             <td>
                                 <form action="/user/edit/<?= $users->id; ?>" method="post">
                                     <input type="submit" class="btn btn-secondary" value="Modifier" name="editUser">
                                 </form>
                             </td>
+                            <?php else : ?>
+                                <td>(MOI)</td>
+                            <?php endif ?>
                         </tr>
                         <?php $counter += 1 ?>
                     <?php endforeach; ?>

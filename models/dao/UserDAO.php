@@ -124,9 +124,9 @@ class UserDAO extends AbstractDAO
                 ]);
                 return true;
             } catch (PDOException $e) {
-                //throw new Exception("");
+                throw new Exception("");
                 print $e->getMessage();
-                //return false;
+                return false;
             }
         }
     }
@@ -155,10 +155,9 @@ class UserDAO extends AbstractDAO
                 }
             }
           
-            throw new Exception();
-            return false;
         } catch (PDOException $e) {
             print $e->getMessage();
+            throw new Exception();
             return false;
         }
     }
