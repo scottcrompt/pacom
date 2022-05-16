@@ -85,6 +85,7 @@ class UserDAO extends AbstractDAO
                 ]);
                 return true;
             } catch (PDOException $e) {
+                throw new Exception();
                 print $e->getMessage();
                 return false;
             }
@@ -198,6 +199,7 @@ class UserDAO extends AbstractDAO
                 $data['id']
             ]);
         } catch (PDOException $e) {
+            throw new Exception();
             print $e->getMessage();
             return false;
         }
@@ -228,6 +230,7 @@ class UserDAO extends AbstractDAO
             ]);
             return true;
         } catch (PDOException $e) {
+            throw new Exception();
             print $e->getMessage();
             return false;
         }
@@ -245,6 +248,7 @@ class UserDAO extends AbstractDAO
                 $token
             ]);
         } catch(PDOException $e) {
+            throw new Exception();
             print $e->getMessage();
         }
     }

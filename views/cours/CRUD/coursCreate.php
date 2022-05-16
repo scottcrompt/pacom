@@ -68,6 +68,7 @@
                   </div>
                 </div>
                 </div>
+                <input type="hidden" name="ecurie" value="1">
                 <input type="hidden" name="route" value="/cours">
 
                 <hr class="mb-4">

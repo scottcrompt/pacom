@@ -58,6 +58,7 @@ class ChevalDAO extends AbstractDAO
                 ]);
                 return true;
             } catch (PDOException $e) {
+                throw new Exception();
                 print $e->getMessage();
                 return false;
             }
@@ -95,6 +96,7 @@ class ChevalDAO extends AbstractDAO
                 $data['id']
             ]);
         } catch (PDOException $e) {
+            throw new Exception();
             print $e->getMessage();
             return false;
         }

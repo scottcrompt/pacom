@@ -106,7 +106,7 @@ class UserController extends AbstractController
             ) {
                 try {
                     $store = $this->store(false, $data);
-                } catch (Exception $e) {
+                } catch (Exception $e) {   // Si erreur dans store
                     include_once('../views/head.php');
                     include_once('../views/error.php');
                     include_once('../views/foot.php');
@@ -151,24 +151,27 @@ class UserController extends AbstractController
         //Variable pour check si l'utilisateur connecté ne se supprime pas lui-même
         $userDAO = new UserDAO();
         $user = $userDAO->fetchall();
-        $IDloggedUser = $userDAO->fetchIdWhere('UserID', 'user', 'sessionToken', $_COOKIE['sessionToken']);
-        if ($data!= $IDloggedUser['UserID']) {   // Check si l'utilisateur connecté ne se supprime pas lui-même
-            if ($_SESSION['roleLoggedUser'] == 'admin') {
-                try {
-                    $this->dao->delete($_POST);
-                } catch (Exception $e) {
-                    include_once('../views/head.php');
-                    include_once('../views/error.php');
-                    include_once('../views/foot.php');
+        if (isset($_SESSION['roleLoggedUser']) && isset($_COOKIE['sessionToken'])) {
+            $IDloggedUser = $userDAO->fetchIdWhere('UserID', 'user', 'sessionToken', isset($_SESSION['roleLoggedUser']));
+            if ($data != $IDloggedUser['UserID']) {   // Check si l'utilisateur connecté ne se supprime pas lui-même
+                if ($_SESSION['roleLoggedUser'] == 'admin') {
+                    try {
+                        $this->dao->delete($_POST);
+                    } catch (Exception $e) {
+                        include_once('../views/head.php');
+                        include_once('../views/error.php');
+                        include_once('../views/foot.php');
+                    }
+                } else {
+                    $this->index();
                 }
-            } else {
-                $this->index();
+                if (empty($e)) {
+                    $messageConfirmation = 'Utilisateur supprimé';
+                    $url = $_POST['route'] ? $_POST['route'] : '/';
+                    header("Location:{$url}?message=" . $messageConfirmation);
+                }
             }
-            $messageConfirmation = 'Utilisateur supprimé';
-            $url = $_POST['route'] ? $_POST['route'] : '/';
-            header("Location:{$url}?message=" . $messageConfirmation);
-        }
-        else{
+        } else {
             $this->index();
         }
     }
@@ -207,16 +210,20 @@ class UserController extends AbstractController
 
     public function edit($id)
     {
-        if ($_SESSION['roleLoggedUser'] == 'admin') {
+        if (isset($_SESSION['roleLoggedUser']) && isset($_COOKIE['sessionToken'])) {
+            if ($_SESSION['roleLoggedUser'] == 'admin') {
 
-            $user = $this->dao->fetch($id, "UserID");
+                $user = $this->dao->fetch($id, "UserID");
 
-            $roleDAO = new RoleDAO();
-            $role = $roleDAO->fetchAll();
+                $roleDAO = new RoleDAO();
+                $role = $roleDAO->fetchAll();
 
-            include('../views/head.php');
-            include('../views/user/CRUD/userEdit.php');
-            include('../views/foot.php');
+                include('../views/head.php');
+                include('../views/user/CRUD/userEdit.php');
+                include('../views/foot.php');
+            } else {
+                $this->index();
+            }
         } else {
             $this->index();
         }
@@ -226,21 +233,16 @@ class UserController extends AbstractController
     {
         try {
             $update = $this->dao->update($id, $data);
-            var_dump($update);
         } catch (Exception $e) {
             include_once('../views/head.php');
             include_once('../views/error.php');
             include_once('../views/foot.php');
         }
         if (isset($update)) {
-            if ($update == true) {
+            if ($update == true && empty($e)) {
                 $messageConfirmation = 'Utilisateur modifié';
                 $url = $_POST['route'] ? $_POST['route'] : '/';
                 header("Location:{$url}?message=" . $messageConfirmation);
-            } else {
-                include_once('../views/head.php');
-                include_once('../views/error.php');
-                include_once('../views/foot.php');
             }
         } else {
             include_once('../views/head.php');

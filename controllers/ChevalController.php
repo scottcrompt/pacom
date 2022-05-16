@@ -27,7 +27,7 @@ class ChevalController extends AbstractController
                 include_once('../views/cheval/chevalIndex.php');
                 include_once('../views/foot.php');
             }
-            
+
             // Si pas connecté on renvoie sur la page d'accueil
             else {
 
@@ -41,7 +41,7 @@ class ChevalController extends AbstractController
                 include_once('../views/foot.php');
             }
         } else {
-            
+
             include_once('../views/head.php');
             include_once('../views/accueil/accueil.php');
             include_once('../views/foot.php');
@@ -53,13 +53,17 @@ class ChevalController extends AbstractController
         if (!empty($data)) {
             //inserer en db le nouveau cheval
             if (!empty($data['nom']) && !empty($data['user'])) {
-                $store = $this->store(false, $data);
-                var_dump($store);
+                try {
+                    $store = $this->store(false, $data);
+                } catch (Exception $e) {   // Si erreur dans store
+                    include_once('../views/head.php');
+                    include_once('../views/error.php');
+                    include_once('../views/foot.php');
+                }
                 if ($store === true) {
-                    echo"YO";
                     $messageConfirmation = "Cheval ajouté"; // Message confirmation
                     $url = $data['route'] ? $data['route'] : '/';
-                    header("Location:{$url}?message=" .$messageConfirmation);
+                    header("Location:{$url}?message=" . $messageConfirmation);
                 }
             } else {
                 $messageErreur = "Oups, quelque chose s'est mal passé."; // Message d'erreur
@@ -83,45 +87,62 @@ class ChevalController extends AbstractController
 
     public function delete($data)
     {
+        if (isset($_SESSION['roleLoggedUser']) && isset($_COOKIE['sessionToken'])) {
+            if ($_SESSION['roleLoggedUser'] == 'admin') {
+                try {
+                    $this->dao->delete($_POST);
+                } catch (Exception $e) {
+                    include_once('../views/head.php');
+                    include_once('../views/error.php');
+                    include_once('../views/foot.php');
+                }
+                if (empty($e)) {
+                    $messageConfirmation = 'Cheval supprimé';
+                    $url = $_POST['route'] ? $_POST['route'] : '/';
+                    header("Location:{$url}?message=" . $messageConfirmation);
+                }
+            } else {
+                $this->index();
+            }
+        } else {
+            $this->index();
+        }
+    }
+
+    public function edit($id)
+    {
+        if (isset($_SESSION['roleLoggedUser']) && isset($_COOKIE['sessionToken'])) {
+            if ($_SESSION['roleLoggedUser'] == 'admin') {
+                $cheval = $this->dao->fetch($id, "ChevalID");
+
+                $userDAO = new UserDAO();
+                $user = $userDAO->fetchAll();
+                if ($cheval) {
+                    include('../views/head.php');
+                    include('../views/cheval/edit/chevalEditForm.php');
+                    include('../views/foot.php');
+                }
+            } else {
+                $this->index();
+            }
+        } else {
+            $this->index();
+        }
+    }
+
+    public function update($id, $data)
+    {
         try {
-            $this->dao->delete($_POST);
+            $this->dao->update($id, $data);
         } catch (Exception $e) {
             include_once('../views/head.php');
             include_once('../views/error.php');
             include_once('../views/foot.php');
         }
-        $messageConfirmation = 'Cheval supprimé';
-        $url = $_POST['route'] ? $_POST['route'] : '/';
-        header("Location:{$url}?message=" .$messageConfirmation);
+        if (empty($e)) {
+            $messageConfirmation = 'Cheval modifié';
+            $url = $_POST['route'] ? $_POST['route'] : '/';
+            header("Location:{$url}?message=" . $messageConfirmation);
+        }
     }
-
-    public function edit($id) {
-
-        $cheval = $this->dao->fetch($id,"ChevalID");
-
-        $userDAO = new UserDAO();
-        $user = $userDAO -> fetchAll();
-
-        include ('../views/head.php');
-        include('../views/cheval/edit/chevalEditForm.php');
-        include ('../views/foot.php');
-    }
-
-    public function update($id,$data){
-        try {
-        $this->dao->update($id,$data);
-        }
-        catch(Exception $e){
-            include_once('../views/head.php');
-            include_once('../views/error.php');
-            include_once('../views/foot.php');
-        }
-        $messageConfirmation = 'Cheval modifié';
-        $url = $_POST['route'] ? $_POST['route'] : '/';
-        header("Location:{$url}?message=" .$messageConfirmation);
-
-        }
-    
-    
-      
 }

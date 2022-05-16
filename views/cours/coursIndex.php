@@ -1,5 +1,13 @@
 <!-- Diplay message d'erreur-->
-
+<?php if (isset($messageErreur)) : ?>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="alert alert-danger alert-dismissible text-center" role="alert">
+                <?php echo ($messageErreur); ?>
+            </div>
+        </div>
+    </div>
+<?php endif ?>
 <?php if (isset($_GET['messageErreur'])) : ?>
     <div class="container-fluid">
         <div class="row">
@@ -28,7 +36,6 @@
 
     <a href="/cours/create"><button class="btn btn-lg btn-primary btn-block"> Créer un cours</button></a>
     <!-- Tableau display Cours -------------------------------->
-<?php var_dump($cours); ?>
     <?php if (!empty($cours)) : ?>
         <section id="cheval-list">
             <?php $counter = 1 ?>
@@ -37,17 +44,22 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Date et heure</th>
+                        <th scope="col">Heure</th>
                         <th scope="col">Prix</th>
-                        <th scope="col">Nombre de places</th>
+                        <th scope="col">Places prises</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($cours as $courss) : ?>
+                    <?php foreach ($cours as $courss) : 
+                    //Changement de format pour l'affichage dans la vue
+                        $newDateFormat = date("d-m-Y", strtotime($courss->CoursDateTime));  
+                        $newTimeFormat = date("H:i", strtotime($courss->CoursDateTime));?>
                         <tr>
                             <th scope="row"><?= $counter ?></th>
-                            <td><?= $courss->__get('CoursDateTime'); ?></td>
+                            <td><?= $newDateFormat ?></td>
+                            <td><?= $newTimeFormat ?></td>
                             <td><?= $courss->__get('CoursPrix'); ?></td>
-                            <td><?= $courss->__get('CoursPlace'); ?></td>
+                            <td><?= "/".$courss->__get('CoursPlace'); ?></td>
                             <td>
                                 <form action="/cours/delete" method="post">
                                     <input type="hidden" name="id" value="<?= $courss->id; ?>">
