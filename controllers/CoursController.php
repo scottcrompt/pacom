@@ -24,8 +24,8 @@ class CoursController extends AbstractController
             if ($IDloggedUser && $_SESSION['roleLoggedUser'] == 'admin') {
                 //On renvoie le role à la vue pour afficher le header correcte
                 include_once('../views/head.php');
-                include_once('../views/cours/coursIndex.php');
-                include_once('../views/foot.php');
+                include_once('../views/cours/fullcalendar.html');
+              
             }
             // Si pas connecté on renvoie sur la page d'accueil
             else {
