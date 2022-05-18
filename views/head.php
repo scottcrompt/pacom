@@ -60,7 +60,7 @@
           <a class="nav-link" href="#">Admin</a>
         </li>
         <?php endif ?>
-        <?php if (isset($_COOKIE['sessionToken'])) : 
+        <?php if (isset($_COOKIE['sessionToken']) || isset($_SESSION['roleLoggedUser']) ) : 
           //Afficher seulement si connecté?>
           <li class="nav-item"><a href="/user/deleteToken" class="nav-link">Se déconnecter</a></li>
         <?php endif ?>

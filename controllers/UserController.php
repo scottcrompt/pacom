@@ -34,12 +34,12 @@ class UserController extends AbstractController
                         }
 
                         include_once('../views/head.php');
-                        include_once('../views/proprietaire/proprietaireIndex.php');
+                        include_once('../views/admin/proprietaire/proprietaireIndex.php');
                         include_once('../views/foot.php');
                     }
                 } else {
                     include_once('../views/head.php');
-                    include_once('../views/user/userIndex.php');
+                    include_once('../views/admin/user/userIndex.php');
                     include_once('../views/foot.php');
                 }
             }
@@ -113,6 +113,7 @@ class UserController extends AbstractController
                 }
                 if (empty($e)) {
                     if ($store == true) {
+                        var_dump($_SESSION['roleLoggedUser']);
                         if (!isset($_SESSION['roleLoggedUser'])) {   // Pour register
                             $messageConfirmation = "Votre compte a bien été crée, un mail vous a été envoyé."; // Message confirmation
                         } elseif (isset($_SESSION['roleLoggedUser']) && $_SESSION['roleLoggedUser'] == 'admin') {  //Pour création d'utilisateur admin
@@ -201,7 +202,7 @@ class UserController extends AbstractController
             $roleDAO = new RoleDAO();
             $role = $roleDAO->fetchall();
             include_once('../views/head.php');
-            include_once('../views/user/CRUD/userCreate.php');
+            include_once('../views/admin/user/CRUD/userCreate.php');
             include_once('../views/foot.php');
         } else {
             $this->index();
@@ -219,7 +220,7 @@ class UserController extends AbstractController
                 $role = $roleDAO->fetchAll();
 
                 include('../views/head.php');
-                include('../views/user/CRUD/userEdit.php');
+                include('../views/admin/user/CRUD/userEdit.php');
                 include('../views/foot.php');
             } else {
                 $this->index();

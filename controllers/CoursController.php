@@ -26,7 +26,7 @@ class CoursController extends AbstractController
             // Si role = admin on renvoie sur la page admin
             if ($IDloggedUser && $_SESSION['roleLoggedUser'] == 'admin') {
                 include_once('../views/head.php');
-                include_once('../views/cours/coursIndex.php');
+                include_once('../views/admin/cours/coursIndex.php');
                 include_once('../views/foot.php');
             }
             // Si pas connecté on renvoie sur la page d'accueil
@@ -56,7 +56,7 @@ class CoursController extends AbstractController
             $roleDAO = new RoleDAO();
             $role = $roleDAO->fetchall();
             include_once('../views/head.php');
-            include_once('../views/cours/CRUD/coursCreate.php');
+            include_once('../views/admin/cours/CRUD/coursCreate.php');
             include_once('../views/foot.php');
         } else {
             $this->index();
@@ -98,13 +98,13 @@ class CoursController extends AbstractController
 
                 $messageErreur = "Oups, quelque chose s'est mal passé."; // Message d'erreur
                 include_once('../views/head.php');
-                include_once('../views/cours/coursIndex.php');
+                include_once('../views/admin/cours/coursIndex.php');
                 include_once('../views/foot.php');
             }
         } else {
             $messageErreur = "Oups, quelque chose s'est mal passé."; // Message d'erreur
             include_once('../views/head.php');
-            include_once('../views/cours/coursIndex.php');
+            include_once('../views/admin/cours/coursIndex.php');
             include_once('../views/foot.php');
         }
     }
@@ -143,7 +143,7 @@ class CoursController extends AbstractController
                 $newTimeFormat = date("H:i", strtotime($cours->CoursDateTime));
                 if ($cours) {
                     include('../views/head.php');
-                    include('../views/cours/CRUD/coursEdit.php');
+                    include('../views/admin/cours/CRUD/coursEdit.php');
                     include('../views/foot.php');
                 }
             } else {

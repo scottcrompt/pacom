@@ -24,7 +24,7 @@ class ChevalController extends AbstractController
             // Si role = useer on renvoie sur la page user
             if ($IDloggedUser && $_SESSION['roleLoggedUser'] == 'admin') {
                 include_once('../views/head.php');
-                include_once('../views/cheval/chevalIndex.php');
+                include_once('../views/admin/cheval/chevalIndex.php');
                 include_once('../views/foot.php');
             }
 
@@ -68,13 +68,13 @@ class ChevalController extends AbstractController
             } else {
                 $messageErreur = "Oups, quelque chose s'est mal passé."; // Message d'erreur
                 include_once('../views/head.php');
-                include_once('../views/cheval/chevalIndex.php');
+                include_once('../views/admin/cheval/chevalIndex.php');
                 include_once('../views/foot.php');
             }
         } else {
             $messageErreur = "Oups, quelque chose s'est mal passé."; // Message d'erreur
             include_once('../views/head.php');
-            include_once('../views/cheval/chevalIndex.php');
+            include_once('../views/admin/cheval/chevalIndex.php');
             include_once('../views/foot.php');
         }
     }
@@ -119,7 +119,7 @@ class ChevalController extends AbstractController
                 $user = $userDAO->fetchAll();
                 if ($cheval) {
                     include('../views/head.php');
-                    include('../views/cheval/edit/chevalEditForm.php');
+                    include('../views/admin/cheval/CRUD/chevalEdit.php');
                     include('../views/foot.php');
                 }
             } else {

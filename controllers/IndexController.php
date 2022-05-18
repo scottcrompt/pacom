@@ -23,13 +23,13 @@ class IndexController extends AbstractController
             // Si role = useer on renvoie sur la page user
             if ($IDloggedUser && $_SESSION['roleLoggedUser'] == 'user') {
                 include_once('../views/head.php');
-                include_once('../views/accueil/accueilLogged.php');
+                include_once('../views/user/accueilLoggedUser.php');
                 include_once('../views/foot.php');
             }
             // Si role = admin on renvoie sur la page admin
             elseif ($IDloggedUser && $_SESSION['roleLoggedUser'] == 'admin') {
                 include_once('../views/head.php');
-                include_once('../views/accueil/accueilLoggedAdmin.php');
+                include_once('../views/admin/accueilLoggedAdmin.php');
                 include_once('../views/foot.php');
             }
             // Si pas connecté on renvoie sur la page d'accueil
